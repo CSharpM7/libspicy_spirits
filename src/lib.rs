@@ -16,29 +16,31 @@ extern crate lazy_static;
 
 pub mod imports;
 pub mod vars;
-mod common;
-mod hook;
-
+mod dev;
+//mod hook;
+mod devhook;
+/*
 #[no_mangle]
 pub fn smashline_install() {
     install();
 }
-
+ */
 pub fn install() {
-    crate::common::install();
+    crate::dev::install();
 }
 
 #[skyline::main(name = "smashline_nickspirits")]
 pub fn main() {
     #[cfg(not(feature = "dev"))]{
         //hook::install();
+        devhook::install();
 
         #[cfg(feature = "devhook")]
         return;
 
-        install();
+        //install();
     }
 
     #[cfg(feature = "dev")]
-    smashline_install();
+    install();
 }

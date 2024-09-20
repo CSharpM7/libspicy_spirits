@@ -3,7 +3,9 @@ use once_cell::sync::Lazy;
 use std::{
     sync::Mutex
 };
+use crate::vars::*;
 
+/* 
 struct SpiritEnemy {
     kind: i32,
     color: u64,
@@ -35,7 +37,6 @@ impl PartialEq for SpiritBattle {
         do_vecs_match(&self.enemies,&other.enemies)
     }
 }
-
 
 
 use parking_lot::RwLock;
@@ -134,19 +135,29 @@ unsafe fn load_settings() {
     find_battle(&fight);
 }
 
+*/
+
+extern "Rust" {
+    #[link_name = "is_invalid_map"]
+    pub fn is_invalid_map()->bool;
+
+    #[link_name = "get_sprit_battle_id"]
+    pub fn get_sprit_battle_id()->u64;
+}
+/*
+pub unsafe fn get_sprit_battle_id() -> u64 {
+    return hash40("smoky_progg");
+} 
+*/
 unsafe extern "C" fn fighter_frame(fighter: &mut L2CFighterCommon) {
-    if !IN_INVALID_MAP {
-        let entry_id =  WorkModule::get_int(fighter.module_accessor, *FIGHTER_INSTANCE_WORK_ID_INT_ENTRY_ID);
-        if entry_id == 0 {
-            if sv_information::is_ready_go() && !IS_READY {
-                println!("READY");
-                IS_READY = true;
-            }
-            else if !sv_information::is_ready_go() && !IS_LOADED {
-                if fighter.global_table[STATUS_FRAME].get_f32() >= 15.0 {
-                    println!("LOAD SETTINGS");
-                    IS_LOADED = true;
-                    load_settings();
+    let entry_id =  WorkModule::get_int(fighter.module_accessor, *FIGHTER_INSTANCE_WORK_ID_INT_ENTRY_ID);
+    if entry_id == 0 {
+        if get_sprit_battle_id() != 0 {
+            if sv_information::is_ready_go() {
+                if !IS_READY {
+                    IS_READY = true;
+                    let is_progg = get_sprit_battle_id() == hash40("smoky_progg");
+                    println!("READY: {is_progg}");
                 }
             }
         }
@@ -157,35 +168,17 @@ pub unsafe extern "C" fn fighter_start(fighter: &mut L2CFighterCommon)
 {
     let entry_id = sv_battle_object::entry_id(fighter.battle_object_id);
     let kind = smash::app::utility::get_kind(&mut *fighter.module_accessor);
-    if kind != *FIGHTER_KIND_NANA {
-        //Init Settings
-        if entry_id == 0 {   
-            IS_READY = false;
-            IS_LOADED = false;
-            let stage_id = stage::get_stage_id();
-            FIGHT_STAGE_ID = stage_id;
-            IN_INVALID_MAP = (*StageID::Training..*StageID::Staffroll).contains(&(stage_id as i32));
-            println!("Stage: {stage_id}");
-        }
-        //Log fighters
-        if !IN_INVALID_MAP && !sv_information::is_ready_go() {
-            /*
-            //println!("Fighter {obj_entry} start!");
-            let info = app::lua_bind::FighterManager::get_fighter_information(singletons::FighterManager(), app::FighterEntryID(entry_id));
-            let is_cpu = app::lua_bind::FighterInformation::is_operation_cpu(info);
-            let stocks = app::lua_bind::FighterInformation::stock_count(info);
-            let hp = app::lua_bind::FighterInformation::hit_point_max(info, false);
-                
-            println!("START ID: {entry_id} CPU: {is_cpu} Stock: {stocks} HP {hp}"); 
-             */
-        }
+    if kind != *FIGHTER_KIND_NANA 
+    && entry_id == 0 {
+        println!("Fighter Start");
+        //RESET VARIABLES
+        IN_INVALID_MAP = is_invalid_map();
+        IS_READY = false;
     }
 }
-
 pub fn install() {
-    load_battles();
     smashline::Agent::new("fighter")
         .on_line(Main,fighter_frame)
-        .on_start(fighter_start)
+        //.on_start(fighter_start)
         .install();
 }
