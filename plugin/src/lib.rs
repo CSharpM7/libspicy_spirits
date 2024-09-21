@@ -33,6 +33,7 @@ pub fn install() {
 pub fn main() {
     println!("[spicy_spirits_mod] Mod Loading");
     #[cfg(not(feature = "dev"))]{
+        //Added a slight delay for loading the plugin so that the api can create a list of spirit battles
         std::thread::Builder::new()
             .stack_size(0x40_0000)
             .spawn(|| {

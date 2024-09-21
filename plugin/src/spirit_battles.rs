@@ -1,11 +1,7 @@
-
+/*
+Use this file to add various spirit battles to be checked. Make sure the enemies are only the ones that are initially spawned in
+*/
 use crate::imports::imports_agent::*;
-/* 
-use once_cell::sync::Lazy;
-use std::{
-    sync::Mutex
-};
-use crate::vars::*;*/
 use spicy_spirits::spirits::*;
 
 fn load_battles() {

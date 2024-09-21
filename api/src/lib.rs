@@ -35,6 +35,18 @@ pub unsafe extern "C" fn is_ready() -> bool {
     return is_valid_battle() && sv_information::is_ready_go();
 }
 #[no_mangle]
+pub unsafe extern "C" fn is_ready_init() -> bool {
+    let to_return = *IS_READY_INIT.read();
+    if to_return == true {
+        //set_ready_init(false);
+    }
+    return to_return;
+}
+#[no_mangle]
+pub unsafe extern "C" fn set_ready_init(state: bool) {
+    *IS_READY_INIT.write() = state;
+}
+#[no_mangle]
 pub unsafe extern "C" fn is_valid_battle() -> bool {
     return is_valid_map() && get_sprit_battle_id() > 0;
 }

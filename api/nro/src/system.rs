@@ -54,10 +54,16 @@ unsafe fn startup_set_info(fighter: &mut L2CFighterCommon) {
 unsafe fn startup_set_ready(fighter: &mut L2CFighterCommon) {
     let entry_id =  WorkModule::get_int(fighter.module_accessor, *FIGHTER_INSTANCE_WORK_ID_INT_ENTRY_ID);
     if entry_id == 0 {
-        if sv_information::is_ready_go() && !IS_READY
+        if sv_information::is_ready_go() 
         && spicy_spirits::get_sprit_battle_id() > 0 {
-            println!("[spicy_spirits_nro] READY");
-            IS_READY = true;
+            if !IS_READY {
+                println!("[spicy_spirits_nro] READY");
+                IS_READY = true;
+                spicy_spirits::set_ready_init(true);
+            }
+            else {
+                spicy_spirits::set_ready_init(false);
+            }
         }
         else if !sv_information::is_ready_go() && !IS_LOADED {
             if fighter.global_table[STATUS_FRAME].get_f32() >= 15.0 {
@@ -76,6 +82,7 @@ unsafe fn startup_set_map(fighter: &mut L2CFighterCommon) {
         //Init Settings
         if entry_id == 0 {  
             spicy_spirits::set_sprit_battle_id(0); 
+            spicy_spirits::set_ready_init(false);
             IS_READY = false;
             IS_LOADED = false;
             let stage_id = stage::get_stage_id();

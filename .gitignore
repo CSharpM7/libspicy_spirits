@@ -10,3 +10,4 @@ install.ps1
 .devcontainer/Dockerfile
 .vscode/settings.json
 /romf
+/plugin/romf
