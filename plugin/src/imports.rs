@@ -22,9 +22,6 @@ pub mod imports_acmd {
             macros::*
         },
         smashline::*,
-        //crate::vars::*,
-        //crate::singleslot::*,
-        //crate::data::gamemode::*, 
         sharpsmashlinesuite::{
             *,
             util::{
@@ -64,10 +61,6 @@ pub mod imports_agent {
             *,
             Main,
         },
-        //crate::vars::*,
-        //crate::util::*,
-        //crate::singleslot::*,
-        //crate::data::gamemode::*,
         sharpsmashlinesuite::{
             *,
             util::{

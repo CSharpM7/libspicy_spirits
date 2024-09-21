@@ -3,6 +3,7 @@ pub const RULESET_STOCK: i32 = 1;
 pub const RULESET_HP: i32 = 2;
 
 #[repr(C)]
+#[derive(Copy, Clone)]
 pub struct SpiritEnemy {
     pub kind: i32,
     pub color: u64,
@@ -27,6 +28,7 @@ fn do_vecs_match<T: PartialEq>(a: &Vec<T>, b: &Vec<T>) -> bool {
 }
 
 #[repr(C)]
+#[derive(Clone)]
 pub struct SpiritBattle {
     pub battle_id: u64,
     pub battle_type: i32,

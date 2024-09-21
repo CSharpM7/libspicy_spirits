@@ -1,4 +1,4 @@
-use crate::imports::imports_agent::*;
+use crate::imports::imports::*;
 use once_cell::sync::Lazy;
 use std::{
     sync::Mutex
@@ -14,12 +14,11 @@ pub static mut FIGHT_STAGE_ID: i32 = -1;
 
 use parking_lot::RwLock;
 use lazy_static::lazy_static;
-//pub static SPIRIT_BATTLES: Lazy<Mutex<Vec<SpiritBattle>>> = Lazy::new(|| {Mutex::new(Vec::new())});
 lazy_static! {
     pub static ref SPIRIT_BATTLES: RwLock<SpiritBattleManager> = RwLock::new(SpiritBattleManager::new());
     pub static ref CURRENT_BATTLE: RwLock<SpiritBattle> = RwLock::new(SpiritBattle::new());
     pub static ref CURRENT_BATTLE_ID: RwLock<u64> = RwLock::new(0);
-    pub static ref IS_INVALID_MAP: RwLock<bool> = RwLock::new(false);
+    pub static ref IS_VALID_MAP: RwLock<bool> = RwLock::new(false);
 }
 pub struct SpiritBattleManager {
     pub battles: Vec<SpiritBattle>

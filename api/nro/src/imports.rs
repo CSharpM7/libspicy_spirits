@@ -1,44 +1,3 @@
-pub mod imports_acmd {
-    pub use {
-        smash::{
-            lib::{
-                lua_const::*
-            },
-            app::{
-                *,
-                self,
-                sv_animcmd::{
-                    frame,
-                    wait
-                },
-                lua_bind::*
-            },
-            hash40,
-            lua2cpp::*,
-            phx::*
-        },
-        smash_script::{
-            *,
-            macros::*
-        },
-        smashline::*,
-        //crate::vars::*,
-        //crate::singleslot::*,
-        //crate::data::gamemode::*, 
-        sharpsmashlinesuite::{
-            *,
-            util::{
-                *,
-                self
-            },
-            ext::*,
-            //getvar::*
-        },
-    };
-    pub unsafe extern "C" fn empty_acmd(agent: &mut L2CAgentBase) {
-    }
-}
-
 pub mod imports_agent {
     pub use {
         smash::{
@@ -64,10 +23,7 @@ pub mod imports_agent {
             *,
             Main,
         },
-        //crate::vars::*,
-        //crate::util::*,
-        //crate::singleslot::*,
-        //crate::data::gamemode::*,
+        
         sharpsmashlinesuite::{
             *,
             util::{

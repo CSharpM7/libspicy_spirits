@@ -1,15 +1,15 @@
 
 use crate::imports::imports_agent::*;
+/* 
 use once_cell::sync::Lazy;
 use std::{
     sync::Mutex
 };
-use crate::vars::*;
+use crate::vars::*;*/
 use spicy_spirits::spirits::*;
 
 fn load_battles() {
     unsafe {
-        //let mut battlemanager = SPIRIT_BATTLES.write();
         let prog_enemies: Vec<SpiritEnemy> = vec![SpiritEnemy{kind: *FIGHTER_KIND_MARIO,color: 3}];
         let prog = SpiritBattle {
             battle_id: hash40("smoky_progg"),
@@ -19,7 +19,7 @@ fn load_battles() {
             stage_id: *StageID::Battle_Pikmin_Planet,
             enemies: prog_enemies,
         };
-        //battlemanager.battles.push(prog);
+        println!("[spicy_spirits_mod] Plugin: adding smoky prog...");
         spicy_spirits::add_battle(prog);
     }
 }
