@@ -10,12 +10,7 @@ unsafe extern "C" fn fighter_frame(fighter: &mut L2CFighterCommon) {
     let spirit_battle = spicy_spirits::get_sprit_battle_id();
     if spicy_spirits::is_ready() {
         if spirit_battle == hash40("smoky_progg") {
-            if entry_id == 0 {
-                crate::spirit_scripts::smoky_progg::player_frame(fighter);
-                if spicy_spirits::is_ready_init() {
-                    crate::spirit_scripts::smoky_progg::player_init(fighter);
-                }
-            }
+            crate::spirit_scripts::smoky_progg::spirit_frame(fighter, entry_id);
         }
     }
 }
