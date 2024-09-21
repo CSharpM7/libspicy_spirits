@@ -137,6 +137,7 @@ unsafe fn load_settings() {
 
 */
 
+/*
 extern "Rust" {
     #[link_name = "is_invalid_map"]
     pub fn is_invalid_map()->bool;
@@ -144,11 +145,13 @@ extern "Rust" {
     #[link_name = "get_sprit_battle_id"]
     pub fn get_sprit_battle_id()->u64;
 }
-/*
+*/
+pub unsafe fn is_invalid_map() -> bool {
+    return false;
+} 
 pub unsafe fn get_sprit_battle_id() -> u64 {
     return hash40("smoky_progg");
 } 
-*/
 unsafe extern "C" fn fighter_frame(fighter: &mut L2CFighterCommon) {
     let entry_id =  WorkModule::get_int(fighter.module_accessor, *FIGHTER_INSTANCE_WORK_ID_INT_ENTRY_ID);
     if entry_id == 0 {

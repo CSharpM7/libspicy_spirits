@@ -7,13 +7,19 @@ for checking if the current match could be a spirit, and returning the spirit id
 */
 
 use crate::imports::imports_agent::*;
+use crate::spirits::*;
+use crate::vars::*;
+/* 
 use once_cell::sync::Lazy;
 use std::{
     sync::Mutex
 };
-use crate::vars::*;
 
 
+pub static mut IS_READY: bool = false;
+pub static mut IS_LOADED: bool = false;
+pub static mut IN_INVALID_MAP: bool = false;
+pub static mut FIGHT_STAGE_ID: i32 = -1;
 
 
 use parking_lot::RwLock;
@@ -35,7 +41,9 @@ impl SpiritBattleManager {
         }
     }
 }
-
+*/
+//moved
+/* 
 fn load_battles() {
     unsafe {
         let mut battlemanager = SPIRIT_BATTLES.write();
@@ -50,7 +58,7 @@ fn load_battles() {
         };
         battlemanager.battles.push(prog);
     }
-}
+}*/
 /* 
 unsafe fn find_battle(compare_against: &SpiritBattle) {
     let mut battlemanager = SPIRIT_BATTLES.read();
@@ -62,15 +70,9 @@ unsafe fn find_battle(compare_against: &SpiritBattle) {
     }
 }
 */
-#[no_mangle]
-pub unsafe extern "Rust" fn is_invalid_map() -> bool {
-    return *IS_INVALID_MAP.read();
-}
-#[no_mangle]
-pub unsafe extern "Rust" fn get_sprit_battle_id() -> u64 {
-    return *CURRENT_BATTLE_ID.read();
-}
+
 fn set_battle_id(compare_against: &mut SpiritBattle) -> bool {
+    /* 
     unsafe {
         let mut battlemanager = SPIRIT_BATTLES.read();
         for battle in (&battlemanager.battles) {
@@ -83,7 +85,7 @@ fn set_battle_id(compare_against: &mut SpiritBattle) -> bool {
                 break;
             }
         }
-    }
+    }*/
     false
 }
 
@@ -106,7 +108,7 @@ unsafe fn startup_load_battle(fighter: &mut L2CFighterCommon) {
         //let stocks = app::lua_bind::FighterInformation::stock_count(info);
         let enemy_hp = app::lua_bind::FighterInformation::hit_point_max(info, false);
         let enemy_color = app::lua_bind::FighterInformation::fighter_color(info);
-        let enemy_id = get_active_battle_object_id_from_entry_id(entry_id).unwrap_or(*BATTLE_OBJECT_ID_INVALID as u32);
+        let enemy_id = 0;//get_active_battle_object_id_from_entry_id(entry_id).unwrap_or(*BATTLE_OBJECT_ID_INVALID as u32);
         if enemy_id != *BATTLE_OBJECT_ID_INVALID as u32 {
             let enemy_obj = get_battle_object_from_id(enemy_id);
             let enemy_boma = &mut *(*enemy_obj).module_accessor;
@@ -192,9 +194,8 @@ pub unsafe extern "C" fn fighter_start(fighter: &mut L2CFighterCommon)
 {
     startup_set_map(fighter);
 }
-
 pub fn install() {
-    load_battles();
+    //load_battles();
     smashline::Agent::new("fighter")
         .on_line(Main,fighter_frame)
         .on_start(fighter_start)
