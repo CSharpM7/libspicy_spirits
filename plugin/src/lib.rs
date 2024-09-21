@@ -11,9 +11,6 @@
     deprecated
 )]
 
-#[macro_use]
-extern crate lazy_static;
-
 pub mod imports;
 pub mod vars;
 mod fighter;

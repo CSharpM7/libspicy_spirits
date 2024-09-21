@@ -74,7 +74,7 @@ unsafe fn respawn_effect(fighter: &mut L2CFighterCommon) {
         FIGHTER_POISON_DIST_MAX/1.75,
         true,
     0,0,0,0,0,false,false) as u32;
-    EffectModule::set_rgb(fighter.module_accessor, ENEMY_EFFECT_ID, 1.0, 0.0, 0.0);
+    EffectModule::set_rgb(fighter.module_accessor, ENEMY_EFFECT_ID, 0.8, 0.0, 0.0);
 }
 
 unsafe fn enemy_frame(fighter: &mut L2CFighterCommon) {
