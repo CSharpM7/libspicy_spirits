@@ -22,15 +22,6 @@ pub mod imports_acmd {
             macros::*
         },
         smashline::*,
-        sharpsmashlinesuite::{
-            *,
-            util::{
-                *,
-                self
-            },
-            ext::*,
-            //getvar::*
-        },
     };
     pub unsafe extern "C" fn empty_acmd(agent: &mut L2CAgentBase) {
     }
@@ -60,15 +51,6 @@ pub mod imports_agent {
         smashline::{
             *,
             Main,
-        },
-        sharpsmashlinesuite::{
-            *,
-            util::{
-                *,
-                self
-            },
-            ext::*,
-            //getvar::*
         },
     };
     pub unsafe extern "C" fn empty_status(agent: &mut L2CAgentBase) -> L2CValue {

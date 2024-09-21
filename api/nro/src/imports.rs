@@ -23,16 +23,6 @@ pub mod imports_agent {
             *,
             Main,
         },
-        
-        sharpsmashlinesuite::{
-            *,
-            util::{
-                *,
-                self
-            },
-            ext::*,
-            //getvar::*
-        },
     };
     pub unsafe extern "C" fn empty_status(agent: &mut L2CAgentBase) -> L2CValue {
         0.into()

@@ -1,6 +1,7 @@
 use crate::imports::imports_agent::*;
 use spicy_spirits::{*,spirits::*};
 use crate::vars::*;
+use crate::util::*;
 
 unsafe fn startup_set_info(fighter: &mut L2CFighterCommon) {
     let entries = app::lua_bind::FighterManager::entry_count(singletons::FighterManager()) as u32;
@@ -66,7 +67,7 @@ unsafe fn startup_set_ready(fighter: &mut L2CFighterCommon) {
             }
         }
         else if !sv_information::is_ready_go() && !IS_LOADED {
-            if fighter.global_table[STATUS_FRAME].get_f32() >= 15.0 {
+            if fighter.global_table[0xE].get_f32() >= 15.0 {
                 println!("[spicy_spirits_nro] Set Battle Info");
                 IS_LOADED = true;
                 startup_set_info(fighter);

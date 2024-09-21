@@ -17,8 +17,8 @@ unsafe fn player_frame(fighter: &mut L2CFighterCommon) {
         let other_pos = *PostureModule::pos(enemy_boma);
         //let height = WorkModule::get_param_float(fighter.module_accessor, hash40("height"), 0);
         //let other_height = WorkModule::get_param_float(fighter.module_accessor, hash40("height"), 0);
-        let mut offset = Vector3f::zero();
-        let mut other_offset = Vector3f::zero();
+        let mut offset = smash::phx::Vector3f{ x: 0.0, y: 0.0, z: 0.0 };
+        let mut other_offset = smash::phx::Vector3f{ x: 0.0, y: 0.0, z: 0.0 };
         ModelModule::joint_global_offset_from_top(fighter.module_accessor, Hash40{hash: hash40("rot")}, &mut offset); 
         //offset = Vector3f{x: 0.0, y: 3.0*scale, z: 0.0 };
         ModelModule::joint_global_offset_from_top(enemy_boma, Hash40{hash: hash40("rot")}, &mut other_offset);  
@@ -39,15 +39,15 @@ unsafe fn player_frame(fighter: &mut L2CFighterCommon) {
                     fighter.module_accessor,
                     Hash40::new("sys_hit_poison"),
                     Hash40::new("rot"),
-                    &Vector3f::new(
-                        (sv_math::rand(hash40("fighter"), (POISON_FX_DIST_MAX*2.0+1.0) as i32) as f32)-POISON_FX_DIST_MAX, 
-                        (sv_math::rand(hash40("fighter"), (POISON_FX_DIST_MAX*2.0+1.0) as i32) as f32)-POISON_FX_DIST_MAX, 
-                        (sv_math::rand(hash40("fighter"), (POISON_FX_DIST_MAX*2.0+1.0) as i32) as f32)-POISON_FX_DIST_MAX
-                    ),
-                    &Vector3f::zero(),
+                    &smash::phx::Vector3f{
+                         x: (sv_math::rand(hash40("fighter"), (POISON_FX_DIST_MAX*2.0+1.0) as i32) as f32)-POISON_FX_DIST_MAX, 
+                         y: (sv_math::rand(hash40("fighter"), (POISON_FX_DIST_MAX*2.0+1.0) as i32) as f32)-POISON_FX_DIST_MAX, 
+                         z: (sv_math::rand(hash40("fighter"), (POISON_FX_DIST_MAX*2.0+1.0) as i32) as f32)-POISON_FX_DIST_MAX
+                    },
+                    &smash::phx::Vector3f{ x: 0.0, y: 0.0, z: 0.0 },
                     1.0,
-                    &Vector3f::new(0.1, 0.1, 0.5),
-                    &Vector3f::new(0.1, 0.1, 0.5),
+                    &smash::phx::Vector3f{ x:0.1, y: 0.1, z: 0.5},
+                    &smash::phx::Vector3f{ x:0.1, y: 0.1, z: 0.5},
                     false,
                     0,
                     0,
@@ -70,7 +70,7 @@ unsafe fn respawn_effect(fighter: &mut L2CFighterCommon) {
         Hash40::new("sys_metamon_aura"), 
         Hash40::new("rot"),
         &Vector3f{x: 0.0, y: 0.0, z: 0.0},
-        &VECTOR_ZERO,
+        &smash::phx::Vector3f { x: 0.0, y: 0.0, z: 0.0 },
         FIGHTER_POISON_DIST_MAX/1.75,
         true,
     0,0,0,0,0,false,false) as u32;
