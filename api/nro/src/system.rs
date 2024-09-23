@@ -1,7 +1,9 @@
 use crate::imports::imports_agent::*;
 use spicy_spirits::{*,spirits::*};
-use crate::vars::*;
 use crate::util::*;
+
+pub static mut IS_READY: bool = false;
+pub static mut IS_LOADED: bool = false;
 
 unsafe fn startup_set_info(fighter: &mut L2CFighterCommon) {
     let entries = app::lua_bind::FighterManager::entry_count(singletons::FighterManager()) as u32;
@@ -88,7 +90,7 @@ unsafe fn startup_set_map(fighter: &mut L2CFighterCommon) {
             IS_LOADED = false;
             let stage_id = stage::get_stage_id();
             spicy_spirits::set_valid_map(stage_id);
-            println!("[spicy_spirits_nro] Stage: {stage_id} ({IN_INVALID_MAP})");
+            println!("[spicy_spirits_nro] Stage: {stage_id}");
         }
     }
 }
