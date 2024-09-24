@@ -74,7 +74,6 @@ pub unsafe extern "C" fn set_sprit_battle_id_from_battle(compare_against: &mut S
     unsafe {
         let mut battlemanager = SPIRIT_BATTLES.read();
         for battle in (&battlemanager.battles) {
-            println!("[spicy_spirits_api] Looking at a battle...");
             if (*battle == *compare_against) {
                 let battle_id = (*battle).battle_id;
                 (*compare_against).battle_id = battle_id; //technically not necessary but w/e

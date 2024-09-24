@@ -6,7 +6,7 @@ pub const RULESET_HP: i32 = 2;
 #[derive(Copy, Clone)]
 pub struct SpiritEnemy {
     pub kind: i32,
-    pub color: u64,
+    pub color: i32,
 }
 impl SpiritEnemy {
     pub(crate) fn new() -> Self {
@@ -19,7 +19,8 @@ impl SpiritEnemy {
 impl PartialEq for SpiritEnemy {
     fn eq(&self, other: &Self) -> bool {
         self.kind == other.kind &&
-        self.color == other.color
+        (self.color == other.color ||
+        (self.color * other.color == -1))
     }
 }
 fn do_vecs_match<T: PartialEq>(a: &Vec<T>, b: &Vec<T>) -> bool {

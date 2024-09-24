@@ -24,7 +24,7 @@ unsafe fn startup_set_info(fighter: &mut L2CFighterCommon) {
         //let is_cpu = app::lua_bind::FighterInformation::is_operation_cpu(info); 
         //let stocks = app::lua_bind::FighterInformation::stock_count(info);
         let enemy_hp = app::lua_bind::FighterInformation::hit_point_max(info, false);
-        let enemy_color = app::lua_bind::FighterInformation::fighter_color(info);
+        let enemy_color = app::lua_bind::FighterInformation::fighter_color(info) as i32;
         let enemy_id = get_active_battle_object_id_from_entry_id(entry_id).unwrap_or(*BATTLE_OBJECT_ID_INVALID as u32);
         if enemy_id != *BATTLE_OBJECT_ID_INVALID as u32 {
             let enemy_obj = get_battle_object_from_id(enemy_id);
