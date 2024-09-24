@@ -9,7 +9,12 @@ Install `libspicy_spirits` into your plugins directory. In your mod's workspace,
 
 `spicy_spirits::add_battle()` is used to add a `SpiritBattle` to the list of Assigned Spirit Battles to look out for. A `SpiritBattle` uses these values:
 ```
-let prog_enemies = vec![SpiritEnemy{kind: *FIGHTER_KIND_MARIO,color: 3}];
+let prog_enemies = vec![
+    SpiritEnemy{
+        kind: *FIGHTER_KIND_MARIO, //Fighter Kind
+        color: 3 //Fighter Color. You can use -1 to accept any color (useful for Mob fighters)
+    }
+];
 {
 battle_id: hash40("smoky_progg"), //Hash40 of the name of the spirit
 battle_type: RULESET_STOCK, //The ruleset used. Can be _TIME,_STOCK, or _HP

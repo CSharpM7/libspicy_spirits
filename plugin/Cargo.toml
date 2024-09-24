@@ -18,7 +18,7 @@ smashline = { git = "https://github.com/HDR-Development/smashline" }
 smash_singletons = { git = "https://github.com/WuBoytH/smash_singletons.git" }
 arcropolis-api = { git = "https://github.com/Raytwo/arcropolis_api"}
 skyline-web = { git = "https://github.com/skyline-rs/skyline-web" }
-spicy_spirits = { git = "https://github.com/CSharpM7/libspicy_spirits.git" }
+spicy_spirits = { package = "spicy_spirits", git = "https://github.com/CSharpM7/libspicy_spirits.git" }
 
 [profile.dev]
 panic = "abort"
