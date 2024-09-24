@@ -13,7 +13,6 @@
 
 pub mod imports;
 pub mod vars;
-mod fighter;
 mod spirit_battles;
 pub mod spirit_scripts;
 
@@ -23,7 +22,7 @@ pub fn smashline_install() {
 }
 
 pub fn install() {
-    crate::fighter::install();
+    crate::spirit_battles::install();
 }
 
 #[skyline::main(name = "smashline_nickspirits")]
