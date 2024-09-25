@@ -11,11 +11,12 @@ unsafe fn startup_set_info(fighter: &mut L2CFighterCommon) {
 
     //Find out about the ruleset
     let player_info = app::lua_bind::FighterManager::get_fighter_information(singletons::FighterManager(), app::FighterEntryID(0));
+    let enemy_info = app::lua_bind::FighterManager::get_fighter_information(singletons::FighterManager(), app::FighterEntryID(1));
     let stocks = app::lua_bind::FighterInformation::stock_count(player_info);
-    let hp = app::lua_bind::FighterInformation::hit_point_max(player_info, false);
+    let hp = app::lua_bind::FighterInformation::hit_point_max(enemy_info, false);
     let ruleset = if stocks == 0 {RULESET_TIME}
     else if hp == 0.0 {RULESET_STOCK}
-    else {RULESET_HP};
+    else {RULESET_STAMINA};
 
     //Find out about enemies
     let mut enemies: Vec<SpiritEnemy> = vec![];
@@ -23,7 +24,7 @@ unsafe fn startup_set_info(fighter: &mut L2CFighterCommon) {
         let info = app::lua_bind::FighterManager::get_fighter_information(singletons::FighterManager(), app::FighterEntryID(entry_id as i32));
         //let is_cpu = app::lua_bind::FighterInformation::is_operation_cpu(info); 
         //let stocks = app::lua_bind::FighterInformation::stock_count(info);
-        let enemy_hp = app::lua_bind::FighterInformation::hit_point_max(info, false);
+        //let enemy_hp = app::lua_bind::FighterInformation::hit_point_max(info, false);
         let enemy_color = app::lua_bind::FighterInformation::fighter_color(info) as i32;
         let enemy_id = get_active_battle_object_id_from_entry_id(entry_id).unwrap_or(*BATTLE_OBJECT_ID_INVALID as u32);
         if enemy_id != *BATTLE_OBJECT_ID_INVALID as u32 {

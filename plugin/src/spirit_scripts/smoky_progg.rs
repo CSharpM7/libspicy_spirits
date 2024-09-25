@@ -89,16 +89,18 @@ unsafe fn enemy_init(fighter: &mut L2CFighterCommon) {
 }
 
 pub unsafe extern "C" fn spirit_frame(fighter: &mut L2CFighterCommon, entry_id: i32) {
-    if entry_id == 0 {
-        player_frame(fighter);
-        if spicy_spirits::is_ready_init() {
-            player_init(fighter);
+    if spicy_spirits::is_ready() {
+        if entry_id == 0 {
+            player_frame(fighter);
+            if spicy_spirits::is_ready_init() {
+                player_init(fighter);
+            }
         }
-    }
-    else {
-        enemy_frame(fighter);
-        if spicy_spirits::is_ready_init() {
-            enemy_init(fighter);
+        else {
+            enemy_frame(fighter);
+            if spicy_spirits::is_ready_init() {
+                enemy_init(fighter);
+            }
         }
     }
 }

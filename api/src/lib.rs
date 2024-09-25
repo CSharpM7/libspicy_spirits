@@ -25,6 +25,10 @@ use crate::imports::imports::*;
 #[no_mangle]
 pub unsafe extern "C" fn add_battle(battle: spirits::SpiritBattle) {
     let id = battle.battle_id;
+    if SPIRIT_BATTLES.try_write().is_none() {
+        println!("[spicy_spirits_api] error accessing Spirit Battles Map");
+        return;
+    }
     let mut battlemanager = SPIRIT_BATTLES.write();
     battlemanager.battles.push(battle);
     println!("[spicy_spirits_api] added battle {id}");
@@ -72,6 +76,7 @@ pub unsafe extern "C" fn set_sprit_battle_id(id: u64) {
 #[no_mangle]
 pub unsafe extern "C" fn set_sprit_battle_id_from_battle(compare_against: &mut SpiritBattle) {
     unsafe {
+        println!("[spicy_spirits_api] Setting id...");
         let mut battlemanager = SPIRIT_BATTLES.read();
         for battle in (&battlemanager.battles) {
             if (*battle == *compare_against) {
