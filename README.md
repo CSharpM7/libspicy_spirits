@@ -17,7 +17,7 @@ let prog_enemies = vec![
 ];
 {
 battle_id: hash40("smoky_progg"), //Hash40 of the name of the spirit
-battle_type: RULESET_STOCK, //The ruleset used. Can be _TIME,_STOCK, or _HP
+battle_type: RULESET_STOCK, //The ruleset used. Can be _TIME,_STOCK, or _STAMINA
 basic_init_hp: 0.0, //Starting HP during Stamina Mode
 basic_stock: 1, //Starting Stocks
 stage_id: *StageID::Battle_Pikmin_Planet, //Stage ID

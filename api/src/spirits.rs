@@ -1,6 +1,6 @@
 pub const RULESET_TIME: i32 = 0;
 pub const RULESET_STOCK: i32 = 1;
-pub const RULESET_HP: i32 = 2;
+pub const RULESET_STAMINA: i32 = 2;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
