@@ -31,6 +31,9 @@ unsafe fn startup_set_info(fighter: &mut L2CFighterCommon) {
             let enemy_obj = get_battle_object_from_id(enemy_id);
             let enemy_boma = &mut *(*enemy_obj).module_accessor;
             let enemy_kind = smash::app::utility::get_kind(enemy_boma);
+            if enemy_kind < 0 {
+                continue;
+            }
             println!("[spicy_spirits_nro] Entry {entry_id}: Kind:{enemy_kind} (c0{enemy_color})");
             let enemy = SpiritEnemy{
                 kind: enemy_kind,

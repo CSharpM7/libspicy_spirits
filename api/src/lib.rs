@@ -35,6 +35,10 @@ pub unsafe extern "C" fn add_battle(battle: spirits::SpiritBattle) {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn is_end() -> bool {
+    return is_valid_battle() && !sv_information::is_ready_go() && IS_READY;
+}
+#[no_mangle]
 pub unsafe extern "C" fn is_ready() -> bool {
     return is_valid_battle() && sv_information::is_ready_go();
 }
@@ -60,7 +64,7 @@ pub unsafe extern "C" fn is_valid_map() -> bool {
 }
 #[no_mangle]
 pub unsafe extern "C" fn set_valid_map(stage_id: i32) {
-    let is_valid = (!*StageID::Training..*StageID::Staffroll).contains(&(stage_id));
+    let is_valid = !(*StageID::Training..*StageID::Staffroll).contains(&(stage_id));
     return *IS_VALID_MAP.write() = is_valid;
 }
 
@@ -76,7 +80,7 @@ pub unsafe extern "C" fn set_sprit_battle_id(id: u64) {
 #[no_mangle]
 pub unsafe extern "C" fn set_sprit_battle_id_from_battle(compare_against: &mut SpiritBattle) {
     unsafe {
-        println!("[spicy_spirits_api] Setting id...");
+        let mut has_match = false;
         let mut battlemanager = SPIRIT_BATTLES.read();
         for battle in (&battlemanager.battles) {
             if (*battle == *compare_against) {
@@ -86,8 +90,12 @@ pub unsafe extern "C" fn set_sprit_battle_id_from_battle(compare_against: &mut S
                 if (battle_id>0) {
                     println!("[spicy_spirits_api] Current Battle: {battle_id}");
                 }
+                has_match = true;
                 break;
             }
+        }
+        if !has_match {
+            println!("[spicy_spirits_api] No matching rulesets");
         }
     }
 }
