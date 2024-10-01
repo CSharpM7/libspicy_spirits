@@ -14,20 +14,23 @@ let prog_enemies = vec![
         kind: *FIGHTER_KIND_MARIO, //Fighter Kind
         color: 3 //Fighter Color. You can use -1 to accept any color (useful for Mob fighters)
     }
+    //Because this is a vector, you can add more SpiritEnemy objects to this list. Note that if you have Allies in your Spirit Battle, you need to list them first before you list the enemies
 ];
 {
 battle_id: hash40("smoky_progg"), //Hash40 of the name of the spirit
 battle_type: RULESET_STOCK, //The ruleset used. Can be _TIME,_STOCK, or _STAMINA
-basic_init_hp: 0.0, //Starting HP during Stamina Mode
-basic_stock: 1, //Starting Stocks
+basic_init_hp: 0.0, //Starting HP during Stamina Mode. Use the first SpiritEnemy entry's value. Will be ignored during Stock/Time
+basic_stock: 1, //Starting Stocks. Use the player's stock count.
 stage_id: *StageID::Battle_Pikmin_Planet, //Stage ID
-enemies: prog_enemies, //A list of all the enemies that appear at the start
+enemies: prog_enemies, //A list of all the enemies that appear at the start, the same vec variable definied above
 };
 ```
+NOTE: Do NOTE have `spicy_spirits::add_battle()` in a file/function that gets reloaded via the development plugin. See the example plugin on how to split a plugin into two (dev and devhook) so certain fuctions don't get reloaded.
 
 During opff (or acmd or whatever else can be run after the initial countdown), you can use `spicy_spirits::get_sprit_battle_id()` to check if you are in one of the assigned spirit battle you added via `spicy_spirits::add_battle()`. In the example plugin, we check if `spicy_spirits::get_sprit_battle_id() == hash40("smoky_progg")`
 
 Some other api functions of note are:
 - `spicy_spirits::is_ready()` checks if you are in a assigned spirit battle added via `add_battle()`, and that the countdown is finished
 - `spicy_spirits::is_ready_init()` will only return True on the first frame after the countdown has finished, assuming you are in a assigned spirit battle
+- `spicy_spirits::is_end()` will return true when the match ends, regardless of victory or defeat, with `spicy_spirits::is_end()_init` only being true on the first frame
 - `get_sprit_battle_id()` gets the id of the battle you might be in. Will return 0 if you are not in an assigned spirit battle

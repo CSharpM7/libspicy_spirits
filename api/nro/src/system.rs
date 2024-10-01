@@ -4,6 +4,7 @@ use crate::util::*;
 
 pub static mut IS_READY: bool = false;
 pub static mut IS_LOADED: bool = false;
+pub static mut IS_END: bool = false;
 
 unsafe fn startup_set_info(fighter: &mut L2CFighterCommon) {
     let entries = app::lua_bind::FighterManager::entry_count(singletons::FighterManager()) as u32;
@@ -61,6 +62,7 @@ unsafe fn startup_set_info(fighter: &mut L2CFighterCommon) {
 unsafe fn startup_set_ready(fighter: &mut L2CFighterCommon) {
     let entry_id =  WorkModule::get_int(fighter.module_accessor, *FIGHTER_INSTANCE_WORK_ID_INT_ENTRY_ID);
     if entry_id == 0 {
+        //During battle
         if sv_information::is_ready_go() 
         && spicy_spirits::get_sprit_battle_id() > 0 {
             if !IS_READY {
@@ -72,11 +74,25 @@ unsafe fn startup_set_ready(fighter: &mut L2CFighterCommon) {
                 spicy_spirits::set_ready_init(false);
             }
         }
+        //Before Battle
         else if !sv_information::is_ready_go() && !IS_LOADED {
+            spicy_spirits::set_end_init(false);
+            IS_END = false;
             if fighter.global_table[0xE].get_f32() >= 15.0 {
                 println!("[spicy_spirits_nro] Set Battle Info");
                 IS_LOADED = true;
                 startup_set_info(fighter);
+            }
+        }
+        //After Battle
+        else if !sv_information::is_ready_go() && IS_LOADED && IS_READY {
+            if !IS_END {
+                println!("[spicy_spirits_nro] END");
+                IS_END = true;
+                spicy_spirits::set_end_init(true);
+            }
+            else {
+                spicy_spirits::set_end_init(false);
             }
         }
     }

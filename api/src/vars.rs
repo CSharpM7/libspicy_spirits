@@ -19,6 +19,7 @@ lazy_static! {
     pub static ref CURRENT_BATTLE_ID: RwLock<u64> = RwLock::new(0);
     pub static ref IS_VALID_MAP: RwLock<bool> = RwLock::new(false);
     pub static ref IS_READY_INIT: RwLock<bool> = RwLock::new(false);
+    pub static ref IS_END_INIT: RwLock<bool> = RwLock::new(false);
 }
 pub struct SpiritBattleManager {
     pub battles: Vec<SpiritBattle>

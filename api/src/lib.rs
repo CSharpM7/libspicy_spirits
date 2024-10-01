@@ -39,6 +39,10 @@ pub unsafe extern "C" fn is_end() -> bool {
     return is_valid_battle() && !sv_information::is_ready_go() && IS_READY;
 }
 #[no_mangle]
+pub unsafe extern "C" fn is_end_init() -> bool {
+    return *IS_END_INIT.read();
+}
+#[no_mangle]
 pub unsafe extern "C" fn is_ready() -> bool {
     return is_valid_battle() && sv_information::is_ready_go();
 }
@@ -49,6 +53,10 @@ pub unsafe extern "C" fn is_ready_init() -> bool {
         //set_ready_init(false);
     }
     return to_return;
+}
+#[no_mangle]
+pub unsafe extern "C" fn set_end_init(state: bool) {
+    *IS_END_INIT.write() = state;
 }
 #[no_mangle]
 pub unsafe extern "C" fn set_ready_init(state: bool) {
