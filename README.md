@@ -4,6 +4,10 @@ A plugin and api that allows modders to use smashline 2 features for spirit batt
 ## How It Works
 Spicy Spirits checks various information during the start of a match to make assumptions on if you are in a Spirit Battle or not. Hopefully each Spirit Battle has a unique combination of Rulesets and Enemies as to not repeat twice, but there's always a chance for false positives! To edit specific battles, you'll need to add their information to the api with `spicy_spirits::add_battle()` (make sure to only do this once)
 
+## Example Plugin
+
+An example can be found in this repo under the `plugin` [folder](https://github.com/CSharpM7/libspicy_spirits/tree/main/plugin/src). Feel free to use this as a template.
+
 ## How To Use
 Install `libspicy_spirits` into your plugins directory. In your mod's workspace, make sure to add `spicy_spirits = { git = "https://github.com/CSharpM7/libspicy_spirits.git" }` to your `Cargo.toml`.
 
