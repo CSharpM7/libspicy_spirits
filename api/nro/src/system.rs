@@ -2,9 +2,13 @@ use crate::imports::imports_agent::*;
 use spicy_spirits::{*,spirits::*};
 use crate::util::*;
 
+pub static mut IS_FIRST_FIGHTER_LOADED: bool = false;
 pub static mut IS_READY: bool = false;
 pub static mut IS_LOADED: bool = false;
 pub static mut IS_END: bool = false;
+pub const OFFSET_ONCE_PER_FRAME: usize = 0x135b810;
+static mut IS_PENDING_NEW_GAME: bool = false;
+static mut PREVIOUS_GAME_STATE_PTR: u64 = 0;
 
 unsafe fn startup_set_info(fighter: &mut L2CFighterCommon) {
     let entries = app::lua_bind::FighterManager::entry_count(singletons::FighterManager()) as u32;
@@ -81,6 +85,7 @@ unsafe fn startup_set_ready(fighter: &mut L2CFighterCommon) {
             if fighter.global_table[0xE].get_f32() >= 15.0 {
                 println!("[spicy_spirits_nro] Set Battle Info");
                 IS_LOADED = true;
+                IS_FIRST_FIGHTER_LOADED = false;
                 startup_set_info(fighter);
             }
         }
@@ -106,17 +111,23 @@ unsafe fn startup_set_map(fighter: &mut L2CFighterCommon) {
         if entry_id == 0 {  
             spicy_spirits::set_sprit_battle_id(0); 
             spicy_spirits::set_ready_init(false);
+            IS_FIRST_FIGHTER_LOADED = true;
             IS_READY = false;
             IS_LOADED = false;
             let stage_id = stage::get_stage_id();
             spicy_spirits::set_valid_map(stage_id);
-            println!("[spicy_spirits_nro] Stage: {stage_id}");
+            if spicy_spirits::is_valid_game_mode() {
+                println!("[spicy_spirits_nro] Stage: {stage_id}");
+            }
+            else {
+                println!("[spicy_spirits_nro] Currently not playing Adventure/Spirit Board!");
+            }
         }
     }
 }
 
 unsafe extern "C" fn fighter_frame(fighter: &mut L2CFighterCommon) {
-    if spicy_spirits::is_valid_map() {
+    if spicy_spirits::is_valid_map() && spicy_spirits::is_valid_game_mode() {
         startup_set_ready(fighter);
     }
 }
@@ -125,9 +136,87 @@ pub unsafe extern "C" fn fighter_start(fighter: &mut L2CFighterCommon)
 {
     startup_set_map(fighter);
 }
+/*
+TODO: use once per game frame instead of opff to set up plugin.
+Need to figure out how to check if fighters are loaded in.
+
+
+#[skyline::hook(offset = OFFSET_ONCE_PER_FRAME)]
+unsafe fn once_per_game_frame(game_state_ptr: u64) {
+
+    // check the current match mode
+    // 1 is regular smash, 45 is online arena match
+    let match_mode = get_match_mode().0;
+    let valid_mode = [
+        7, //Spirit Board
+        8, //Adventure
+        18, //Training
+        63 //DLC Spirit Board
+    ].contains(&match_mode);
+    //println!("mode is {}", match_mode);
+    if match_mode != 1 && match_mode != 45 {
+    }
+    if PREVIOUS_GAME_STATE_PTR != game_state_ptr {
+        //New Mode
+        spicy_spirits::set_sprit_battle_id(0); 
+        spicy_spirits::set_ready_init(false);
+        IS_READY = false;
+        IS_LOADED = false;
+        let stage_id = stage::get_stage_id();
+        spicy_spirits::set_valid_map(stage_id);
+        println!("[spicy_spirits_nro] Stage: {stage_id}");
+    }
+    PREVIOUS_GAME_STATE_PTR = game_state_ptr;
+    let entries = app::lua_bind::FighterManager::entry_count(singletons::FighterManager()) as u32;
+    if valid_mode 
+    && (IS_FIRST_FIGHTER_LOADED || IS_LOADED) {
+        //During battle
+        if sv_information::is_ready_go() 
+        && spicy_spirits::get_sprit_battle_id() > 0 {
+            if !IS_READY {
+                println!("[spicy_spirits_nro] READY");
+                IS_READY = true;
+                spicy_spirits::set_ready_init(true);
+            }
+            else {
+                spicy_spirits::set_ready_init(false);
+            }
+        }
+        //Before Battle
+        else if !sv_information::is_ready_go() && !IS_LOADED {
+            spicy_spirits::set_end_init(false);
+            IS_END = false;
+            if (entries > 0) {
+                println!("Fighters loaded");
+            }
+            /* 
+            if fighter.global_table[0xE].get_f32() >= 15.0 {
+                println!("[spicy_spirits_nro] Set Battle Info");
+                IS_LOADED = true;
+                startup_set_info(fighter);
+            }
+            */
+        }
+        //After Battle
+        else if !sv_information::is_ready_go() && IS_LOADED && IS_READY {
+            if !IS_END {
+                println!("[spicy_spirits_nro] END");
+                IS_END = true;
+                spicy_spirits::set_end_init(true);
+            }
+            else {
+                spicy_spirits::set_end_init(false);
+            }
+        }
+    }
+
+    call_original!(game_state_ptr)
+}
+*/
 pub fn install() {
     smashline::Agent::new("fighter")
         .on_line(Main,fighter_frame)
         .on_start(fighter_start)
-        .install();
+        .install(); 
+    //skyline::install_hooks!(once_per_game_frame);
 }

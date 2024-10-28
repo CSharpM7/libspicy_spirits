@@ -66,6 +66,11 @@ pub unsafe extern "C" fn set_ready_init(state: bool) {
 pub unsafe extern "C" fn is_valid_battle() -> bool {
     return is_valid_map() && get_sprit_battle_id() > 0;
 }
+
+#[no_mangle]
+pub unsafe extern "C" fn is_valid_mode() -> bool {
+    return is_valid_game_mode();
+}
 #[no_mangle]
 pub unsafe extern "C" fn is_valid_map() -> bool {
     return *IS_VALID_MAP.read();
@@ -106,4 +111,29 @@ pub unsafe extern "C" fn set_sprit_battle_id_from_battle(compare_against: &mut S
             println!("[spicy_spirits_api] No matching rulesets");
         }
     }
+}
+
+pub const OFFSET_GET_MATCH_MODE: usize = 0x1743870;
+
+fn get_match_mode() -> (u32, u32) {
+    #[skyline::from_offset(OFFSET_GET_MATCH_MODE)]
+    fn get_mode_internal(main: &mut u32, sub: &mut u32);
+
+    let mut main = 0u32;
+    let mut sub = 0u32;
+    unsafe {
+        get_mode_internal(&mut main, &mut sub);
+    }
+    (main, sub)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn is_valid_game_mode() -> bool {
+    let match_mode = get_match_mode().0;
+    return [
+        7, //Spirit Board
+        8, //Adventure
+        //18, //Training
+        63 //DLC Spirit Board
+    ].contains(&match_mode);
 }
