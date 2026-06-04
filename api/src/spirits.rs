@@ -46,7 +46,7 @@ fn approximate_eq(n1: f32, n2: f32) -> bool {
 #[derive(Clone)]
 pub struct SpiritBattle {
     pub battle_id: u64,
-    pub battle_type: i32,
+    pub battle_type: u8,
     pub basic_init_hp: f32,
     pub basic_stock: u64,
     pub stage_id: i32,

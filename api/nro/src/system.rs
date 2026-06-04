@@ -15,13 +15,18 @@ unsafe fn startup_set_info(fighter: &mut L2CFighterCommon) {
     let stage = stage::get_stage_id();
 
     //Find out about the ruleset
+    let ruleset = spicy_spirits::get_selected_ruleset();
+
     let player_info = app::lua_bind::FighterManager::get_fighter_information(singletons::FighterManager(), app::FighterEntryID(0));
     let enemy_info = app::lua_bind::FighterManager::get_fighter_information(singletons::FighterManager(), app::FighterEntryID(1));
-    let stocks = app::lua_bind::FighterInformation::stock_count(player_info);
-    let hp = app::lua_bind::FighterInformation::hit_point_max(enemy_info, false);
+    let stocks = ruleset.stock_count;//app::lua_bind::FighterInformation::stock_count(player_info);
+    let hp = app::lua_bind::FighterInformation::hit_point_max(enemy_info, false); //hmm
+    /*
     let ruleset = if stocks == 0 {RULESET_TIME}
     else if hp == 0.0 {RULESET_STOCK}
     else {RULESET_STAMINA};
+    */
+    let battle_type = ruleset.battle_mode;
 
     //Find out about enemies
     let mut enemies: Vec<SpiritEnemy> = vec![];
@@ -54,7 +59,7 @@ unsafe fn startup_set_info(fighter: &mut L2CFighterCommon) {
     println!("[spicy_spirits_nro] Ruleset: {ruleset} ({hp}%*{stocks}) on {stage}");
     let mut fight = SpiritBattle {
         battle_id: 0,
-        battle_type: ruleset,
+        battle_type: battle_type as u8,
         basic_init_hp: hp,
         basic_stock: stocks,
         stage_id: stage,
