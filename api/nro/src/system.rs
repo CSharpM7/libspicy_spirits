@@ -1,5 +1,5 @@
 use crate::imports::imports_agent::*;
-use spicy_spirits::{*,spirits::*};
+use spicy_spirits::{*,rulesets::*,spirits::*};
 use crate::util::*;
 
 pub static mut IS_FIRST_FIGHTER_LOADED: bool = false;
