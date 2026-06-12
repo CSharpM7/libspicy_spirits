@@ -48,7 +48,7 @@ pub struct SpiritBattle {
     pub battle_id: u64,
     pub battle_type: u8,
     pub basic_init_hp: f32,
-    pub basic_stock: u64,
+    pub basic_stock: u32,
     pub stage_id: i32,
     pub enemies: Vec<SpiritEnemy>
 }

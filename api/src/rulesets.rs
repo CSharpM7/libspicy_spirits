@@ -89,10 +89,23 @@ pub struct SelectedRuleset {
 
 pub const SELECTED_RULESET_OFFSET: usize = 0x52c4180; // 13.0.4
 
+#[skyline::from_offset(SELECTED_RULESET_OFFSET)]
+unsafe extern "C" fn get_selected_ruleset_internal() -> SelectedRuleset;
+
 #[no_mangle]
 pub unsafe extern "C" fn get_selected_ruleset() -> SelectedRuleset {
-    #[skyline::from_offset(SELECTED_RULESET_OFFSET)]
-    fn get_selected_ruleset_internal();
-
     return get_selected_ruleset_internal();
 }
+/*
+fn get_match_mode() -> (u32, u32) {
+    #[skyline::from_offset(OFFSET_GET_MATCH_MODE)]
+    fn get_mode_internal(main: &mut u32, sub: &mut u32);
+
+    let mut main = 0u32;
+    let mut sub = 0u32;
+    unsafe {
+        get_mode_internal(&mut main, &mut sub);
+    }
+    (main, sub)
+}
+ */

@@ -1,5 +1,4 @@
 #![feature(
-    concat_idents,
     proc_macro_hygiene
 )]
 #![allow(
@@ -16,6 +15,7 @@ extern crate lazy_static;
 
 mod imports;
 pub mod spirits;
+pub mod rulesets;
 mod vars;
 
 use spirits::*;

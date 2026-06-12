@@ -1,0 +1,6 @@
+https://coolsonickirby.com/arc/prcs.html
+path: fighter/common/param/spirits
+is key: true
+type: struct
+
+World of Light is usually internally referred to as "campaign," so if you look for things with that name, you should find files related to it. I know you can change which spirits appear in param/spirits/campaign/spirits_campaign_map_param_[name of WOL map, for instance "light" for the main overworld or "sub_003_koopa" for Bowser's Castle].prc. To swap out spirits, use PrcEditor and just replace the name of the spirit with the one you want to take its place. For example, if I opened spirits_campaign_map_param_light.prc and replaced eevee with baby_bowser, then Baby Bowser would be the second spirit you encounter in the main overworld. As for the background textures, they're in campaign/campaignmap/normal/model, with some of their animations being in campaign/campaignmap/normal/motion. I don't have any experience with editing tracks though
