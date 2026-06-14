@@ -12,7 +12,7 @@
 
 mod imports;
 mod system;
-mod util;
+pub mod util;
 
 #[skyline::main(name = "libspicy_spirits")]
 pub fn main() {

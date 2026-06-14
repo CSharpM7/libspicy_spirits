@@ -29,6 +29,7 @@ fn do_vecs_match<T: PartialEq>(a: &Vec<T>, b: &Vec<T>) -> bool {
 }
 fn do_enemies_match(a: &Vec<SpiritEnemy>, b: &Vec<SpiritEnemy>) -> bool {
     if a.len() != b.len() {return false;}
+    if a.len() == 0 {return true;}
     for i in 0..a.len()-1 {
         if (a[i] != b[i]) {
             return false;
@@ -69,7 +70,11 @@ impl PartialEq for SpiritBattle {
         let rule_match = self.battle_type == other.battle_type &&
         approximate_eq(self.basic_init_hp,other.basic_init_hp) &&
         self.basic_stock == other.basic_stock;
-        let stage_match = self.stage_id == other.stage_id;
+
+        let has_wildcard_stage = self.stage_id == -1 || other.stage_id == -1; //If any stageid is invalid...
+        let stage_match = (self.stage_id == other.stage_id) 
+        || has_wildcard_stage;
+
         let enemy_match = do_enemies_match(&self.enemies,&other.enemies);
         //println!("R: {rule_match} E: {enemy_match} S: {stage_match}");
         return rule_match && stage_match && enemy_match; 

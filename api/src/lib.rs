@@ -101,7 +101,8 @@ pub unsafe extern "C" fn set_sprit_battle_id_from_battle(compare_against: &mut S
                 (*compare_against).battle_id = battle_id; //technically not necessary but w/e
                 set_sprit_battle_id(battle_id);
                 if (battle_id>0) {
-                    println!("[spicy_spirits_api] Current Battle: {battle_id}");
+                    let battle_as_hex = format!("0x{:X}", battle_id).to_lowercase();
+                    println!("[spicy_spirits_api] Current Battle: {battle_as_hex}");
                 }
                 has_match = true;
                 break;

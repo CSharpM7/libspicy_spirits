@@ -15,47 +15,55 @@ unsafe fn startup_set_info(fighter: &mut L2CFighterCommon) {
     let stage = stage::get_stage_id();
 
     //Find out about the ruleset
-    let ruleset = spicy_spirits::rulesets::get_selected_ruleset();
+    //let ruleset = spicy_spirits::rulesets::get_selected_ruleset();
 
     let player_info = app::lua_bind::FighterManager::get_fighter_information(singletons::FighterManager(), app::FighterEntryID(0));
-    let enemy_info = app::lua_bind::FighterManager::get_fighter_information(singletons::FighterManager(), app::FighterEntryID(1));
-    let stocks = ruleset.stock_count;//app::lua_bind::FighterInformation::stock_count(player_info);
-    let hp = app::lua_bind::FighterInformation::hit_point_max(enemy_info, false); //hmm
-    /*
-    let ruleset = if stocks == 0 {RULESET_TIME}
-    else if hp == 0.0 {RULESET_STOCK}
-    else {RULESET_STAMINA};
-    */
-    let battle_type = ruleset.battle_mode as u8;
+    let stocks = app::lua_bind::FighterInformation::stock_count(player_info) as u32; ///ruleset.stock_count;
+    let mut hp = app::lua_bind::FighterInformation::hit_point_max(player_info, false);
+
+    //let enemy_info = app::lua_bind::FighterManager::get_fighter_information(singletons::FighterManager(), app::FighterEntryID(1));
+
+    let battle_type = if stocks == 0 {spicy_spirits::rulesets::BattleMode::Time as u8}
+    else if hp == 0.0 {spicy_spirits::rulesets::BattleMode::Stock as u8}
+    else {spicy_spirits::rulesets::BattleMode::Stamina as u8};
+
+    //let battle_type = ruleset.battle_mode as u8;
 
     //Find out about enemies
     let mut enemies: Vec<SpiritEnemy> = vec![];
-    for entry_id in 1..entries {
-        let info = app::lua_bind::FighterManager::get_fighter_information(singletons::FighterManager(), app::FighterEntryID(entry_id as i32));
-        //let is_cpu = app::lua_bind::FighterInformation::is_operation_cpu(info); 
-        //let stocks = app::lua_bind::FighterInformation::stock_count(info);
-        //let enemy_hp = app::lua_bind::FighterInformation::hit_point_max(info, false);
-        let enemy_color = app::lua_bind::FighterInformation::fighter_color(info) as i32;
-        let enemy_id = get_active_battle_object_id_from_entry_id(entry_id).unwrap_or(*BATTLE_OBJECT_ID_INVALID as u32);
-        if enemy_id != *BATTLE_OBJECT_ID_INVALID as u32 {
-            let enemy_obj = get_battle_object_from_id(enemy_id);
-            let enemy_boma = &mut *(*enemy_obj).module_accessor;
-            let enemy_kind = smash::app::utility::get_kind(enemy_boma);
-            if enemy_kind < 0 {
-                continue;
+    if entries > 1 {
+        for entry_id in 1..entries {
+            let enemy_info = app::lua_bind::FighterManager::get_fighter_information(singletons::FighterManager(), app::FighterEntryID(entry_id as i32));
+            if entry_id == 1 {
+                hp = app::lua_bind::FighterInformation::hit_point_max(enemy_info, false);
             }
-            println!("[spicy_spirits_nro] Entry {entry_id}: Kind:{enemy_kind} (c0{enemy_color})");
-            let enemy = SpiritEnemy{
-                kind: enemy_kind,
-                color: enemy_color,
-            };
-            enemies.push(enemy);
-        }
-        else {
-            println!("[spicy_spirits_nro] Entry {entry_id} inactive");
+            //let is_cpu = app::lua_bind::FighterInformation::is_operation_cpu(enemy_info); 
+            //let stocks = app::lua_bind::FighterInformation::stock_count(enemy_info);
+            //let enemy_hp = app::lua_bind::FighterInformation::hit_point_max(enemy_info, false);
+            let enemy_id = get_active_battle_object_id_from_entry_id(entry_id).unwrap_or(*BATTLE_OBJECT_ID_INVALID as u32);
+            if enemy_id != *BATTLE_OBJECT_ID_INVALID as u32 {
+                let enemy_obj = get_battle_object_from_id(enemy_id);
+                let enemy_boma = &mut *(*enemy_obj).module_accessor;
+                let enemy_kind = smash::app::utility::get_kind(enemy_boma);
+                let is_boss = *FIGHTER_KIND_KOOPAG <= enemy_kind && enemy_kind <= *FIGHTER_KIND_MIIENEMYG;
+                if enemy_kind < 0 || is_boss {
+                    continue;
+                }
+                let enemy_color = app::lua_bind::FighterInformation::fighter_color(enemy_info) as i32;
+                println!("[spicy_spirits_nro] Entry {entry_id}: Kind:{enemy_kind} (c0{enemy_color})");
+                let enemy = SpiritEnemy{
+                    kind: enemy_kind,
+                    color: enemy_color,
+                };
+                enemies.push(enemy);
+            }
+            else {
+                println!("[spicy_spirits_nro] Entry {entry_id} inactive");
+            }
         }
     }
 
+    let stage_as_hex = format!("0x{:X}", stage).to_lowercase();
     println!("[spicy_spirits_nro] Ruleset: {} ({hp}%*{stocks}) on {stage}",battle_type);
     let mut fight = SpiritBattle {
         battle_id: 0,
@@ -122,10 +130,11 @@ unsafe fn startup_set_map(fighter: &mut L2CFighterCommon) {
             let stage_id = stage::get_stage_id();
             spicy_spirits::set_valid_map(stage_id);
             if spicy_spirits::is_valid_game_mode() {
-                println!("[spicy_spirits_nro] Stage: {stage_id}");
+                //let stage_as_hex = crate::util::to_hex(stage_id as u64);
+                //println!("[spicy_spirits_nro] Stage: 0x{stage_as_hex}");
             }
             else {
-                println!("[spicy_spirits_nro] Currently not playing Adventure/Spirit Board!");
+                //println!("[spicy_spirits_nro] Currently not playing Adventure/Spirit Board!");
             }
         }
     }
