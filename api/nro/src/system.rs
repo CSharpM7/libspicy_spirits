@@ -73,7 +73,7 @@ unsafe fn startup_set_info(fighter: &mut L2CFighterCommon) {
         stage_id: stage,
         enemies: enemies,
     };
-    spicy_spirits::set_sprit_battle_id_from_battle(&mut fight);
+    spicy_spirits::set_spirit_battle_id_from_battle(&mut fight);
 }
 
 unsafe fn startup_set_ready(fighter: &mut L2CFighterCommon) {
@@ -81,7 +81,7 @@ unsafe fn startup_set_ready(fighter: &mut L2CFighterCommon) {
     if entry_id == 0 {
         //During battle
         if sv_information::is_ready_go() 
-        && spicy_spirits::get_sprit_battle_id() > 0 {
+        && spicy_spirits::get_spirit_battle_id() > 0 {
             if !IS_READY {
                 println!("[spicy_spirits_nro] READY");
                 IS_READY = true;
@@ -122,7 +122,7 @@ unsafe fn startup_set_map(fighter: &mut L2CFighterCommon) {
     if kind != *FIGHTER_KIND_NANA {
         //Init Settings
         if entry_id == 0 {  
-            spicy_spirits::set_sprit_battle_id(0); 
+            spicy_spirits::set_spirit_battle_id(0); 
             spicy_spirits::set_ready_init(false);
             IS_FIRST_FIGHTER_LOADED = true;
             IS_READY = false;
@@ -172,7 +172,7 @@ unsafe fn once_per_game_frame(game_state_ptr: u64) {
     }
     if PREVIOUS_GAME_STATE_PTR != game_state_ptr {
         //New Mode
-        spicy_spirits::set_sprit_battle_id(0); 
+        spicy_spirits::set_spirit_battle_id(0); 
         spicy_spirits::set_ready_init(false);
         IS_READY = false;
         IS_LOADED = false;
@@ -186,7 +186,7 @@ unsafe fn once_per_game_frame(game_state_ptr: u64) {
     && (IS_FIRST_FIGHTER_LOADED || IS_LOADED) {
         //During battle
         if sv_information::is_ready_go() 
-        && spicy_spirits::get_sprit_battle_id() > 0 {
+        && spicy_spirits::get_spirit_battle_id() > 0 {
             if !IS_READY {
                 println!("[spicy_spirits_nro] READY");
                 IS_READY = true;

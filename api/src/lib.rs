@@ -64,7 +64,7 @@ pub unsafe extern "C" fn set_ready_init(state: bool) {
 }
 #[no_mangle]
 pub unsafe extern "C" fn is_valid_battle() -> bool {
-    return is_valid_map() && get_sprit_battle_id() > 0;
+    return is_valid_map() && get_spirit_battle_id() > 0;
 }
 
 #[no_mangle]
@@ -82,16 +82,16 @@ pub unsafe extern "C" fn set_valid_map(stage_id: i32) {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn get_sprit_battle_id() -> u64 {
+pub unsafe extern "C" fn get_spirit_battle_id() -> u64 {
     return *CURRENT_BATTLE_ID.read();
     return 0;
 }
 #[no_mangle]
-pub unsafe extern "C" fn set_sprit_battle_id(id: u64) {
+pub unsafe extern "C" fn set_spirit_battle_id(id: u64) {
     return *CURRENT_BATTLE_ID.write() = id;
 }
 #[no_mangle]
-pub unsafe extern "C" fn set_sprit_battle_id_from_battle(compare_against: &mut SpiritBattle) {
+pub unsafe extern "C" fn set_spirit_battle_id_from_battle(compare_against: &mut SpiritBattle) {
     unsafe {
         let mut has_match = false;
         let mut battlemanager = SPIRIT_BATTLES.read();
@@ -99,7 +99,7 @@ pub unsafe extern "C" fn set_sprit_battle_id_from_battle(compare_against: &mut S
             if (*battle == *compare_against) {
                 let battle_id = (*battle).battle_id;
                 (*compare_against).battle_id = battle_id; //technically not necessary but w/e
-                set_sprit_battle_id(battle_id);
+                set_spirit_battle_id(battle_id);
                 if (battle_id>0) {
                     let battle_as_hex = format!("0x{:X}", battle_id).to_lowercase();
                     println!("[spicy_spirits_api] Current Battle: {battle_as_hex}");

@@ -31,11 +31,11 @@ enemies: prog_enemies, //A list of all the enemies that appear at the start, the
 ```
 NOTE: Do NOTE have `spicy_spirits::add_battle()` in a file/function that gets reloaded via the development plugin. See the example plugin on how to split a plugin into two (dev and devhook) so certain fuctions don't get reloaded.
 
-During opff (or acmd or whatever else can be run after the initial countdown), you can use `spicy_spirits::get_sprit_battle_id()` to check if you are in one of the assigned spirit battle you added via `spicy_spirits::add_battle()`. In the example plugin, we check if `spicy_spirits::get_sprit_battle_id() == hash40("smoky_progg")`
+During opff (or acmd or whatever else can be run after the initial countdown), you can use `spicy_spirits::get_spirit_battle_id()` to check if you are in one of the assigned spirit battle you added via `spicy_spirits::add_battle()`. In the example plugin, we check if `spicy_spirits::get_spirit_battle_id() == hash40("smoky_progg")`
 
 Some other api functions of note are:
 - `spicy_spirits::is_valid_game_mode()` checks if you are in a Spirits-related game mode. This includes Spirit Board, Adventure, and DLC Spirit Board.
 - `spicy_spirits::is_ready()` checks if you are in a assigned spirit battle added via `add_battle()`, and that the countdown is finished
 - `spicy_spirits::is_ready_init()` will only return True on the first frame after the countdown has finished, assuming you are in a assigned spirit battle
 - `spicy_spirits::is_end()` will return true when the match ends, regardless of victory or defeat, with `spicy_spirits::is_end()_init` only being true on the first frame
-- `get_sprit_battle_id()` gets the id of the battle you might be in. Will return 0 if you are not in an assigned spirit battle
+- `get_spirit_battle_id()` gets the id of the battle you might be in. Will return 0 if you are not in an assigned spirit battle

@@ -46,11 +46,18 @@ fn approximate_eq(n1: f32, n2: f32) -> bool {
 #[repr(C)]
 #[derive(Clone)]
 pub struct SpiritBattle {
+    /// hash40 of the unique name you want to give this fight
     pub battle_id: u64,
+    /// Time = 0, Stock = 1, Stamina = 2,
     pub battle_type: u8,
+    /// Starting hp for player during spirit battle
     pub basic_init_hp: f32,
+    /// Starting stock for player during spirit battle
     pub basic_stock: u32,
+    /// StageID:: of the stage used in this spirit battle
     pub stage_id: i32,
+    /// Vector of SpiritEnemies that resembles the first loaded in enemies
+    /// This will ignore any enemies that are in standby, or marked not to appear first
     pub enemies: Vec<SpiritEnemy>
 }
 impl SpiritBattle {
