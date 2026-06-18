@@ -79,7 +79,7 @@ impl PartialEq for SpiritBattle {
         self.basic_stock == other.basic_stock;
 
         let has_wildcard_stage = self.stage_id == -1 || other.stage_id == -1; //If any stageid is invalid...
-        let stage_match = (self.stage_id == other.stage_id) || has_wildcard_stage;
+        let stage_match = ((self.stage_id == other.stage_id) || has_wildcard_stage);
 
         let enemy_match = do_enemies_match(&self.enemies,&other.enemies);
         //println!("R: {rule_match} E: {enemy_match} S: {stage_match}");

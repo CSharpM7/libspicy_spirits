@@ -35,7 +35,7 @@ unsafe fn startup_set_info(fighter: &mut L2CFighterCommon) {
         for entry_id in 1..entries {
             let enemy_info = app::lua_bind::FighterManager::get_fighter_information(singletons::FighterManager(), app::FighterEntryID(entry_id as i32));
             if entry_id == 1 {
-                hp = app::lua_bind::FighterInformation::hit_point_max(enemy_info, false);
+                //hp = app::lua_bind::FighterInformation::hit_point_max(enemy_info, false);
             }
             //let is_cpu = app::lua_bind::FighterInformation::is_operation_cpu(enemy_info); 
             //let stocks = app::lua_bind::FighterInformation::stock_count(enemy_info);
@@ -44,13 +44,17 @@ unsafe fn startup_set_info(fighter: &mut L2CFighterCommon) {
             if enemy_id != *BATTLE_OBJECT_ID_INVALID as u32 {
                 let enemy_obj = get_battle_object_from_id(enemy_id);
                 let enemy_boma = &mut *(*enemy_obj).module_accessor;
-                let enemy_kind = smash::app::utility::get_kind(enemy_boma);
+                let mut enemy_kind = smash::app::utility::get_kind(enemy_boma);
                 let is_boss = *FIGHTER_KIND_KOOPAG <= enemy_kind && enemy_kind <= *FIGHTER_KIND_MIIENEMYG;
                 if enemy_kind < 0 || is_boss {
                     continue;
                 }
+                if enemy_kind == *FIGHTER_KIND_ICE_CLIMBER {
+                    enemy_kind = *FIGHTER_KIND_ICE_CLIMBER;
+                }
                 let enemy_color = app::lua_bind::FighterInformation::fighter_color(enemy_info) as i32;
-                println!("[spicy_spirits_nro] Entry {entry_id}: Kind:{enemy_kind} (c0{enemy_color})");
+                let enemy_kind_as_hex = format!("0x{:X}", enemy_kind).to_lowercase();
+                println!("[spicy_spirits_nro] Entry {entry_id}: Kind:{enemy_kind_as_hex} (c0{enemy_color})");
                 let enemy = SpiritEnemy{
                     kind: enemy_kind,
                     color: enemy_color,
@@ -64,7 +68,7 @@ unsafe fn startup_set_info(fighter: &mut L2CFighterCommon) {
     }
 
     let stage_as_hex = format!("0x{:X}", stage).to_lowercase();
-    println!("[spicy_spirits_nro] Ruleset: {} ({hp}%*{stocks}) on {stage}",battle_type);
+    println!("[spicy_spirits_nro] Ruleset: {} ({hp}%*{stocks}) on {stage_as_hex}",battle_type);
     let mut fight = SpiritBattle {
         battle_id: 0,
         battle_type: battle_type,
